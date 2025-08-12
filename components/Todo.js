@@ -1,7 +1,7 @@
 class Todo {
-  constructor(data, selector, handleCheck, handleDelete) {
+  constructor(data, todoTemplateSelector, handleCheck, handleDelete) {
     this._data = data;
-    this._templateElement = document.querySelector(selector);
+    this._templateElement = document.querySelector(todoTemplateSelector);
     this._handleCheck = handleCheck; // Updates completed count
     this._handleDelete = handleDelete; // Updates total count
   }
