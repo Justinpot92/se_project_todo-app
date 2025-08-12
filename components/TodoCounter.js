@@ -1,32 +1,44 @@
+// ===== TODO COUNTER COMPONENT =====
 class TodoCounter {
-  // todos should be the array of initial todos
-  // selector is the selector for the counter text element
+  // todos: array of initial todo items
+  // selector: CSS selector for the counter text element
   constructor(todos, selector) {
-    this._element = // select the appropriate element
-    this._completed = // number of completed todos
-    this._total = // the total number of todos
+    this._element = document.querySelector(selector);
+    if (!this._element) {
+      throw new Error(`Element not found for selector: ${selector}`);
+    }
+
+    this._total = todos.length;
+    this._completed = todos.filter((todo) => todo.completed).length;
+    this._updateText();
   }
-  
-  // Call this when a checkbox is clicked, and when a completed
-  // to-do is deleted.
-    updateCompleted = (increment) => {
-    // if increment is true, add 1 to this._completed. Otherwise,  
-    // subtract 1. In either case, call the method to update   
-    // the text content.
+
+  // Called when a todo is checked/unchecked or a completed todo is deleted
+  updateCompleted = (increment) => {
+    this._completed += increment ? 1 : -1;
+
+    // Keep within bounds
+    if (this._completed < 0) this._completed = 0;
+    if (this._completed > this._total) this._completed = this._total;
+
+    this._updateText();
   };
 
-  // Call this when a to-do is deleted, or when a to-do is   
-  // created via the form. 
+  // Called when a todo is added or deleted
   updateTotal = (increment) => {
-    // if increment is true, add 1 to this._total. Otherwise, 
-    // subtract 1. In either case, call the method to update the  
-    // text content.  
+    this._total += increment ? 1 : -1;
+
+    // Adjust completed count if total shrinks below it
+    if (this._total < this._completed) {
+      this._completed = this._total;
+    }
+    if (this._total < 0) this._total = 0;
+
+    this._updateText();
   };
 
-  // Call the method to update the text content
+  // Update the displayed text with current counts
   _updateText() {
-    // Sets the text content of corresponding text element.  
-    // Call this in the constructor, and whenever the counts get updated.
     this._element.textContent = `Showing ${this._completed} out of ${this._total} completed`;
   }
 }
